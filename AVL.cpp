@@ -1,4 +1,4 @@
-﻿#include <iostream>
+#include <iostream>
 using namespace std;
 
 /* -----------------------------------------------------------
@@ -269,16 +269,52 @@ NO* removerArvore(NO* no, int valor) {
         no->dir = removerArvore(no->dir, valor);
     }
     else {
-                
+
         // Caso 1: Nó sem filhos
-        // Se o nó não possui filhos (esquerda e direita são NULL), basta removê-lo e retornar NULL para o pai.
+      // Se o nó não possui filhos (esquerda e direita são NULL), basta removê-lo e retornar NULL para o pai.
+
+        if (no->esq == NULL && no->dir == NULL) {
+            free(no);
+                return NULL;
+        }
 
         // Caso 2: Nó com apenas um filho
         // Se o nó possui apenas um filho (esquerda ou direita), retorna o ponteiro para esse filho, liberando o nó atual.
+         
+        else if (no->esq != NULL)
+        {
+            NO* aux = no->dir;
+                free(no);
+                return aux;
+        } 
+
+        else if (no->dir != NULL) {
+
+            NO* aux = no->esq;
+                free(no);
+            return aux;
+
+
+        }
 
         // Caso 3: Nó com dois filhos
         // Se o nó possui dois filhos, encontra o sucessor (menor valor da subárvore direita),
         // copia o valor do sucessor para o nó atual e remove recursivamente o sucessor.
+
+        else {
+            NO* temp = no->dir;
+            while (temp->esq != NULL) {
+                temp = temp->esq;
+            }
+
+            no->valor = temp->valor;
+            no->dir = removerArvore(no->dir, temp->valor);
+
+        }
+
+     
+
+
     }
     // Atualiza altura e balanceia
     no->altura = maior(alturaNo(no->esq), alturaNo(no->dir)) + 1;
